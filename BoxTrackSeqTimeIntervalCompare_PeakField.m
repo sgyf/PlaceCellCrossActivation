@@ -2,7 +2,7 @@ function BoxTrackSeqTimeIntervalCompare_PeakField
 % Part of BoxTrackSeqTimeIntervalCompare. This function compute all cells' session averaged peak
 % firing location on track, time interval between neighbouring peaks.
 %
-% Created on 8/24/2016, XM.haha
+% Created on 8/24/2016, XM.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Choose date and session, import SpikeDB
