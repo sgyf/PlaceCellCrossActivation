@@ -165,17 +165,19 @@ for k = 1:numel(comcellid)
             for n = 1:(numel(peakpos_trk_nonan{k}{m})-1)  % n = #of not NaN cells in event m
                 dist_trk{k}{m}(n) = interval_trk_norm{k}{m}(n);
                 formercell = peakposcell_trk_nonan{k}{m}(n);   lattercell = peakposcell_trk_nonan{k}{m}(n+1);
-                if formercell <= lattercell
+                if (formercell ~= 1) && ((lattercell-1) ~= numel(interval_box_norm{k}{m})) && (formercell <= lattercell)
                     dist_box{k}{m}(n) = sum(interval_box_norm{k}{m}(formercell:lattercell-1)) -...
                         interval_box_norm{k}{m}(formercell)/2 -...
                         interval_box_norm{k}{m}(lattercell-1)/2;
-                elseif formercell > lattercell
-                    dist_box{k}{m}(n) = sum(interval_box_norm{k}{m}(lattercell:formercell-1)) -...
+                elseif (formercell ~= 1) && ((lattercell-1) ~= numel(interval_box_norm{k}{m})) && (formercell > lattercell)
+                    dist_box{k}{m}(n) = -sum(interval_box_norm{k}{m}(lattercell:formercell-1)) -...
                         interval_box_norm{k}{m}(formercell-1)/2 -...
                         interval_box_norm{k}{m}(lattercell)/2;
+                else
+                    dist_box{k}{m}(n) = nan;
                 end
             end
-            dist_diff{k}{m} = sum(abs(dist_trk{k}{m} - dist_box{k}{m}));   % time interval difference between track and box
+            dist_diff{k}{m} = nansum(abs(dist_trk{k}{m} - dist_box{k}{m}));   % time interval difference between track and box
             
             % Compute the time interval difference b/w track and shuffled box peak locations
             %--------------------------------------------------------------------------------
@@ -187,17 +189,19 @@ for k = 1:numel(comcellid)
                 for nn = 1:(numel(peakpos_trk_nonan{k}{m})-1)  % n = #of not NaN cells in event m
                     dist_trk{k}{m}(nn) = interval_trk_norm{k}{m}(nn);
                     formercell = peakposcell_trk_nonan{k}{m}(nn);   lattercell = peakposcell_trk_nonan{k}{m}(nn+1);
-                    if formercell <= lattercell
+                    if (formercell ~= 1) && ((lattercell-1) ~= numel(interval_box_norm{k}{m})) && (formercell <= lattercell)
                         dist_box_shuf(nn) = sum(shufinterval(formercell:lattercell-1)) -...
                             shufinterval(formercell)/2 -...
                             shufinterval(lattercell-1)/2;
-                    elseif formercell > lattercell
+                    elseif (formercell ~= 1) && ((lattercell-1) ~= numel(interval_box_norm{k}{m})) && (formercell > lattercell)
                         dist_box_shuf(nn) = -sum(shufinterval(lattercell:formercell-1)) -...
                             shufinterval(formercell-1)/2 -...
                             shufinterval(lattercell)/2;
+                    else
+                        dist_box_shuf(nn) = nan;
                     end
                 end
-                dist_diff_shuf{k}{m}(n) = sum(abs(dist_trk{k}{m} - dist_box_shuf));   % time interval difference between track and shuffled box
+                dist_diff_shuf{k}{m}(n) = nansum(abs(dist_trk{k}{m} - dist_box_shuf));   % time interval difference between track and shuffled box
             end
             
             z = zscore([dist_diff{k}{m},dist_diff_shuf{k}{m}]);   % convert time interval difference to zscore
