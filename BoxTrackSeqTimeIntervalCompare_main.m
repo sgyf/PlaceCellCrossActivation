@@ -147,43 +147,12 @@ for k = 1:numel(comcellid)
             if numel(comcellid_nonan) ~= numel(cellIDind)   % some comcellid_nonan are not in cellID_box
                 continue
             end
-            %             [~,peakpos_box{k}{m},peakposcell_box{k}{m}] = intersect(angle,PeakAngleEvt_sig{m}(cellIDind));   % commonn cell (that has spike in current evt) peak time ID
-            %             PeakAngleEvt_sig_nonan{k}{m} = PeakAngleEvt_sig{m}(cellIDind);
-            %             xx = arrayfun(@(x) find(angle == x), PeakAngleEvt_sig{m}(cellIDind),'UniformOutput',0);
-            %             if sum(cellfun(@isempty,xx)) > 0
-            %                 xx{cellfun(@isempty,xx)} = nan;
-            %             end
-            %             peakpos_box{k}{m} = sort(cell2mat(xx));  % peak angle index in box
-            %
+       
             peakpos_box{k}{m} = sort(arrayfun(@(x) find(angle == x), PeakAngleEvt_sig{m}(cellIDind)));
             
             for n = 1:(numel(peakpos_box{k}{m})-1)  % n = #of not NaN cells in event m
                 interval_box{k}{m}(n) = sum(time_box_sig{m}(peakpos_box{k}{m}(n):peakpos_box{k}{m}(n+1))) - time_box_sig{m}(peakpos_box{k}{m}(n))/2 - time_box_sig{m}(peakpos_box{k}{m}(n+1))/2;
             end   % Interval_trk is time interval b/w neighbour cells on track
-            
-            %             % Normalized time interval to sum up to 1, in order to compare
-            %             %-------------------------------------------------------------
-            %             interval_trk_norm{k}{m} = interval_trk{k}{m}./sum(interval_trk{k}{m});
-            %             interval_box_norm{k}{m} = interval_box{k}{m}./sum(interval_box{k}{m});
-            %             BoxTimeLen = sum(interval_box{k}{m});   % total box sequence lenght for current evt
-            %
-            %             % Compute the time interval difference b/w track and box peak locations
-            %             %----------------------------------------------------------------------
-            %             for n = 1:(numel(peakpos_trk_nonan{k}{m})-1)  % n = #of not NaN cells in event m
-            %                 dist_trk{k}{m}(n) = interval_trk_norm{k}{m}(n);
-            %                 formercell = peakposcell_trk_nonan{k}{m}(n);   lattercell = peakposcell_trk_nonan{k}{m}(n+1);
-            %                 formercellTidx = find(angle == PeakAngleEvt_sig_nonan{k}{m}(formercell));
-            %                 lattercellTidx = find(angle == PeakAngleEvt_sig_nonan{k}{m}(lattercell));
-            %                 if formercellTidx <= lattercellTidx
-            %                     dist_box{k}{m}(n) = (sum(time_box_sig{m}(formercellTidx:lattercellTidx)) -...
-            %                         time_box_sig{m}(formercellTidx)/2 -...
-            %                         time_box_sig{m}(lattercellTidx)/2)/BoxTimeLen;
-            %                 elseif formercellTidx > lattercellTidx
-            %                     dist_box{k}{m}(n) = -(sum(time_box_sig{m}(lattercellTidx:formercellTidx)) -...
-            %                         time_box_sig{m}(formercellTidx)/2 -...
-            %                         time_box_sig{m}(lattercellTidx)/2)/BoxTimeLen;
-            %                 end
-            %             end
             
             % Normalized time interval to sum up to 1, in order to compare
             %-------------------------------------------------------------
